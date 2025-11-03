@@ -12,12 +12,16 @@ namespace WorkTimeTracker.Views
     public partial class MainWindow : Window
     {
         private readonly DataService _dataService = new();
+        private readonly RaportService _raportService;
+        private readonly StatystykiService _statystykiService;
         private List<Pracownik> _employees = new();
         private Dictionary<int, List<RejestrCzasu>> _rejestry = new();
         private Pracownik? _editingEmployee;
 
         public MainWindow()
         {
+            _raportService = new RaportService(_dataService);
+            _statystykiService = new StatystykiService(_dataService);
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             InitializeReportPickers();
@@ -155,43 +159,62 @@ namespace WorkTimeTracker.Views
             }
 
             var pracownik = ed.Employee;
-            // reload rejestry to ensure latest
-            _rejestry = await _dataService.WczytajRejestry();
-            var entries = _rejestry.TryGetValue(pracownik.Id, out var list) ? list : new List<RejestrCzasu>();
 
             // Pobierz wybrany miesiąc i rok
-            var selectedMonth = ReportMonthPicker.SelectedIndex + 1; // Indeks + 1 daje nam numer miesiąca
+            var selectedMonth = ReportMonthPicker.SelectedIndex + 1;
             var selectedYear = (int)ReportYearPicker.SelectedItem;
-            var reportDate = new DateTime(selectedYear, selectedMonth, 1);
 
-            // Filtruj wpisy tylko dla wybranego miesiąca
-            var monthEntries = entries.Where(r => r.Data.Year == selectedYear && r.Data.Month == selectedMonth).ToList();
-
-            // Convert RejestrCzasu -> WpisCzasu (ZwyklyDzien/Urlop/Nadgodziny)
-            var wpisy = new List<WpisCzasu>();
-            foreach (var r in monthEntries)
-            {
-                if (r.CzyUrlop)
-                    wpisy.Add(new Urlop(r.Data));
-                else if (r.CzyNadgodziny || r.LiczbaGodzin > 8)
-                    wpisy.Add(new Nadgodziny(r.Data, r.LiczbaGodzin));
-                else
-                    wpisy.Add(new ZwyklyDzien(r.Data, r.LiczbaGodzin));
-            }
-
-            var raport = new RaportMiesieczny(pracownik, wpisy, reportDate);
-            var tekst = raport.GenerujRaport();
-            ReportBox.Text = tekst;
-
-            // Optionally save to file under LocalAppData
             try
             {
-                var folder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WorkTimeTracker");
-                System.IO.Directory.CreateDirectory(folder);
-                var sciezka = System.IO.Path.Combine(folder, $"raport_{pracownik.Id}_{DateTime.Now:yyyyMMddHHmmss}.txt");
-                raport.ZapiszRaport(sciezka);
+                var raportTekst = await _raportService.GenerujRaportMiesieczny(pracownik.Id, selectedYear, selectedMonth);
+                ReportBox.Text = raportTekst;
+                await _raportService.ZapiszRaport(raportTekst, pracownik.Id);
             }
-            catch { /* ignore save errors */ }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas generowania raportu: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            MessageBox.Show("Raport został wygenerowany i zapisany.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private async void GenerateEmployeeReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (EmployeesList.SelectedItem is not EmployeeDisplay ed)
+            {
+                MessageBox.Show("Wybierz pracownika z listy (kliknij wpis).", "Brak wyboru", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var pracownik = ed.Employee;
+
+            try
+            {
+                var raportTekst = await _raportService.GenerujRaportPracownika(pracownik.Id);
+                ReportBox.Text = raportTekst;
+                await _raportService.ZapiszRaport(raportTekst, pracownik.Id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas generowania raportu: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            MessageBox.Show("Raport został wygenerowany i zapisany.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ShowDetailedStatsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (EmployeesList.SelectedItem is not EmployeeDisplay ed)
+            {
+                MessageBox.Show("Wybierz pracownika z listy.", "Brak wyboru", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var statystykiWindow = new StatystykiWindow(_statystykiService, ed.Employee.Id)
+            {
+                Owner = this
+            };
+            statystykiWindow.ShowDialog();
         }
 
         private class EmployeeDisplay

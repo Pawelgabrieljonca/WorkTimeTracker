@@ -20,3 +20,6 @@ C:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTracker\o
 C:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTracker\obj\Debug\net8.0-windows\WorkTimeTracker.pdb
 C:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTracker\obj\Debug\net8.0-windows\WorkTimeTracker.genruntimeconfig.cache
 C:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTracker\obj\Debug\net8.0-windows\ref\WorkTimeTracker.dll
+C:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTracker\obj\Debug\net8.0-windows\WorkTimeTracker.sourcelink.json
+C:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTracker\obj\Debug\net8.0-windows\Views\StatystykiWindow.baml
+C:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTracker\obj\Debug\net8.0-windows\Views\StatystykiWindow.g.cs
