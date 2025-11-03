@@ -1,0 +1,74 @@
+<Window x:Class="WorkTimeTracker.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="WorkTimeTracker" Height="600" Width="900">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left: lista pracowników i akcje -->
+        
+        <StackPanel Grid.Column="0" Margin="5">
+            <TextBlock Text="Pracownicy" FontWeight="Bold" FontSize="16" />
+            <ListBox x:Name="EmployeesList" Height="300" DisplayMemberPath="Display" SelectionChanged="EmployeesList_SelectionChanged" />
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <Button x:Name="RefreshButton" Content="Odśwież" Width="80" Margin="0,0,8,0" Click="RefreshButton_Click" />
+                <Button x:Name="EditEmployeeButton" Content="Edytuj" Width="80" Margin="0,0,8,0" Click="EditEmployeeButton_Click" />
+                <Button x:Name="DeleteEmployeeButton" Content="Usuń" Width="80" Margin="0,0,8,0" Click="DeleteEmployeeButton_Click" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <TextBlock Text="Miesiąc raportu:" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <ComboBox x:Name="ReportMonthPicker" Width="120" Margin="0,0,8,0" />
+                <ComboBox x:Name="ReportYearPicker" Width="80" Margin="0,0,8,0" />
+                <Button x:Name="GenerateReportButton" Content="Generuj raport" Width="120" Click="GenerateReportButton_Click" />
+            </StackPanel>
+            <TextBlock Text="Szybkie statystyki" FontWeight="Bold" Margin="0,12,0,4" />
+            <TextBox x:Name="StatsBox" Height="150" IsReadOnly="True" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!-- Right: formularze -->
+        <StackPanel Grid.Column="1" Margin="10,0,0,0">
+            <TextBlock x:Name="EmployeeFormTitle" Text="Dodaj pracownika" FontWeight="Bold" FontSize="14" />
+            <UniformGrid Columns="2" Margin="0,6,0,0">
+                <TextBlock Text="Imię:" VerticalAlignment="Center" />
+                <TextBox x:Name="FirstNameBox" />
+                <TextBlock Text="Nazwisko:" VerticalAlignment="Center" />
+                <TextBox x:Name="LastNameBox" />
+                <TextBlock Text="Stanowisko:" VerticalAlignment="Center" />
+                <TextBox x:Name="PositionBox" />
+                <TextBlock Text="Stawka (PLN/h):" VerticalAlignment="Center" />
+                <TextBox x:Name="RateBox" />
+            </UniformGrid>
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,12">
+                <Button x:Name="AddEmployeeButton" Content="Dodaj pracownika" Width="150" Click="AddEmployeeButton_Click" />
+                <Button x:Name="SaveEmployeeButton" Content="Zapisz zmiany" Width="150" Margin="8,0,0,0" Click="SaveEmployeeButton_Click" Visibility="Collapsed" />
+                <Button x:Name="CancelEditButton" Content="Anuluj" Width="80" Margin="8,0,0,0" Click="CancelEditButton_Click" Visibility="Collapsed" />
+            </StackPanel>
+
+            <Separator Margin="0,8" />
+
+            <TextBlock Text="Dodaj wpis czasu" FontWeight="Bold" FontSize="14" />
+            <UniformGrid Columns="2" Margin="0,6,0,0">
+                <TextBlock Text="Wybierz pracownika (ID):" VerticalAlignment="Center" />
+                <TextBox x:Name="EmployeeIdForEntryBox" />
+                <TextBlock Text="Data:" VerticalAlignment="Center" />
+                <DatePicker x:Name="EntryDatePicker" SelectedDate="{x:Static sys:DateTime.Today}" />
+                <TextBlock Text="Godziny:" VerticalAlignment="Center" />
+                <TextBox x:Name="HoursBox" />
+                <TextBlock Text="Urlop:" VerticalAlignment="Center" />
+                <CheckBox x:Name="IsLeaveCheck" />
+                <TextBlock Text="Nadgodziny:" VerticalAlignment="Center" />
+                <CheckBox x:Name="IsOvertimeCheck" />
+            </UniformGrid>
+            <Button x:Name="AddEntryButton" Content="Dodaj wpis" Width="120" Margin="0,8,0,12" Click="AddEntryButton_Click" />
+
+            <Separator Margin="0,8" />
+
+            <TextBlock Text="Wygenerowany raport" FontWeight="Bold" Margin="0,6,0,4" />
+            <TextBox x:Name="ReportBox" Height="200" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+        </StackPanel>
+    </Grid>
+</Window>
