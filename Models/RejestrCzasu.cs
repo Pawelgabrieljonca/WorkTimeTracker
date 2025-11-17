@@ -8,6 +8,11 @@ namespace WorkTimeTracker.Models
     /// </summary>
     public class RejestrCzasu
     {
+        // Primary key for persistence
+        public int Id { get; set; }
+        // Foreign key to Pracownik when stored in database
+        public int PracownikId { get; set; }
+
         private DateTime _data;
         private decimal _liczbaGodzin;
         private bool _czyUrlop;

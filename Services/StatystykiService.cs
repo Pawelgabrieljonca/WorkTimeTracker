@@ -8,10 +8,10 @@ namespace WorkTimeTracker.Services
 {
     public class StatystykiService
     {
-        private readonly DataService _dataService;
+        private readonly WorkTimeTracker.Interfaces.IDataService _dataService;
         private Dictionary<int, StatystykiPracownika> _statystykiCache;
 
-        public StatystykiService(DataService dataService)
+        public StatystykiService(WorkTimeTracker.Interfaces.IDataService dataService)
         {
             _dataService = dataService;
             _statystykiCache = new Dictionary<int, StatystykiPracownika>();

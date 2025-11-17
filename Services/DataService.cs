@@ -9,7 +9,7 @@ using WorkTimeTracker.Utils;
 
 namespace WorkTimeTracker.Services
 {
-    public class DataService
+    public class DataService : WorkTimeTracker.Interfaces.IDataService
     {
         // In-memory collections recommended by the user
         // Lista pracowników
@@ -209,4 +209,4 @@ namespace WorkTimeTracker.Services
             _rejestryCache.Clear();
         }
     }
-}
+} 

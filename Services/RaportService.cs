@@ -8,9 +8,9 @@ namespace WorkTimeTracker.Services
 {
     public class RaportService
     {
-        private readonly DataService _dataService;
+        private readonly WorkTimeTracker.Interfaces.IDataService _dataService;
 
-        public RaportService(DataService dataService)
+        public RaportService(WorkTimeTracker.Interfaces.IDataService dataService)
         {
             _dataService = dataService;
         }

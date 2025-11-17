@@ -1,0 +1,36 @@
+<Window x:Class="WorkTimeTracker.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Logowanie" Height="220" Width="360" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0 0 0 8">
+            <TextBlock FontSize="16" FontWeight="Bold">WorkTime - Logowanie</TextBlock>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 4">
+            <Label Width="80">Użytkownik:</Label>
+            <TextBox x:Name="UsernameBox" Width="220" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 4">
+            <Label Width="80">Hasło:</Label>
+            <PasswordBox x:Name="PasswordBox" Width="220" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Top" Margin="0 8 0 0">
+            <Button x:Name="LoginButton" Width="100" HorizontalAlignment="Left" Click="LoginButton_Click">Zaloguj</Button>
+            <TextBlock Margin="0 10 0 0" TextWrapping="Wrap">
+                <Run Text="Administracja: admin/admin" />
+                <LineBreak />
+                <Run Text="Przykład pracownika: p1/p1 (login zaczyna się od 'p' + Id, hasło 'p{Id}')." />
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

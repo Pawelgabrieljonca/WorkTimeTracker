@@ -3,25 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 using WorkTimeTracker.Models;
 using WorkTimeTracker.Services;
+using WorkTimeTracker.Data;
 using WorkTimeTracker.Utils;
 
 namespace WorkTimeTracker.Views
 {
     public partial class MainWindow : Window
     {
-        private readonly DataService _dataService = new();
-        private readonly RaportService _raportService;
-        private readonly StatystykiService _statystykiService;
+    private readonly WorkTimeTracker.Interfaces.IDataService _dataService;
+    private readonly RaportService _raportService;
+    private readonly StatystykiService _statystykiService;
         private List<Pracownik> _employees = new();
         private Dictionary<int, List<RejestrCzasu>> _rejestry = new();
         private Pracownik? _editingEmployee;
 
         public MainWindow()
         {
+            // Choose data service implementation based on settings
+            if (AppSettings.UseEfDataService)
+            {
+                var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WorkTimeTracker");
+                Directory.CreateDirectory(folder);
+                var dbPath = Path.Combine(folder, "worktimedata.db");
+                var conn = $"Data Source={dbPath}";
+                var options = new DbContextOptionsBuilder<WorkTimeContext>()
+                    .UseSqlite(conn)
+                    .Options;
+                var ctx = new WorkTimeContext(options);
+                _dataService = new EfDataService(ctx);
+            }
+            else
+            {
+                _dataService = new DataService();
+            }
+
             _raportService = new RaportService(_dataService);
             _statystykiService = new StatystykiService(_dataService);
+
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             InitializeReportPickers();
