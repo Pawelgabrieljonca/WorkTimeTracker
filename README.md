@@ -27,7 +27,4 @@ cd "c:\Users\pawel\Dokumenty\Studia\05_studia\ProjketPwSW\WorkTime\WorkTimeTrack
 dotnet restore; dotnet build
 ```
 
-Następne kroki (sugestie):
 
-- Dodać MVVM: ViewModels i mechanizm DI (np. Microsoft.Extensions.DependencyInjection).
-- Dodać trwałe przechowywanie (SQLite/EF Core) i testy jednostkowe.
